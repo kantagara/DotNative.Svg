@@ -1,0 +1,8 @@
+<Project>
+  <PropertyGroup>
+    <DotNativePluginKind
+      Condition="'$(DotNativePluginKind)' == '' and '$(DotNativePluginEntry)' != ''"
+      >Native</DotNativePluginKind>
+    <DotNativePluginKind Condition="'$(DotNativePluginKind)' == ''">Managed</DotNativePluginKind>
+  </PropertyGroup>
+</Project>

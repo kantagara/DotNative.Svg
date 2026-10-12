@@ -1,0 +1,36 @@
+<Project>
+  <Target
+    Name="CheckDotNativePluginLanguage"
+    BeforeTargets="CoreCompile"
+    Condition="'$(TargetFramework)' == 'net10.0'"
+  >
+    <Error
+      Code="DNPLUGIN002"
+      Condition="!$([System.Text.RegularExpressions.Regex]::IsMatch('$(LangVersion)', '^((1[4-9]|[2-9][0-9]|[1-9][0-9]{2,})(\.[0-9]+)?|latest|latestMajor|preview)$'))"
+      Text="DotNative net10.0 service properties require C# 14 or later. Remove the older LangVersion override, or build the net9.0 target for method accessors."
+    />
+  </Target>
+  <Target Name="GenerateDotNativePluginManifest" BeforeTargets="_GetPackageFiles">
+    <PropertyGroup>
+      <_DotNativePluginManifestPath>$(IntermediateOutputPath)dotnative/plugin.json</_DotNativePluginManifestPath>
+      <_DotNativePluginManifest>{
+  &quot;id&quot;: &quot;$(PackageId)&quot;,
+  &quot;kind&quot;: &quot;$([System.String]::Copy('$(DotNativePluginKind)').ToLowerInvariant())&quot;,
+  &quot;entry&quot;: &quot;$(DotNativePluginEntry)&quot;
+}</_DotNativePluginManifest>
+    </PropertyGroup>
+    <MakeDir Directories="$(IntermediateOutputPath)dotnative" />
+    <WriteLinesToFile
+      File="$(_DotNativePluginManifestPath)"
+      Lines="$(_DotNativePluginManifest)"
+      Overwrite="true"
+    />
+    <ItemGroup>
+      <None
+        Include="$(_DotNativePluginManifestPath)"
+        Pack="true"
+        PackagePath="dotnative/plugin.json"
+      />
+    </ItemGroup>
+  </Target>
+</Project>
