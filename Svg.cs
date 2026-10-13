@@ -20,6 +20,19 @@ public interface ISvg
     );
 }
 
+/// <summary>Rasterizes SVG pictures using a bounded, thread-safe cache. No registration is required.</summary>
+public static class Svg
+{
+    private static readonly ISvg Renderer = new SvgRenderer();
+
+    public static ImageSource Picture(
+        ReadOnlySpan<byte> document,
+        float width,
+        float height,
+        Color? color = null
+    ) => Renderer.Picture(document, width, height, color);
+}
+
 public static class SvgServices
 {
     public static IServiceCollection AddSvg(this IServiceCollection services)

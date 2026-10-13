@@ -36,3 +36,12 @@ with `AddSvg()` before building the provider.
 
 A `net10.0` application uses the property syntax with C# 14 or later. A `net9.0`
 application uses `services.Svg()`.
+
+## Direct use (no registration)
+
+```csharp
+var image = Svg.Picture(svgBytes, width: 24, height: 24);
+```
+
+The static API uses a bounded, thread-safe raster cache. `ISvg` and `AddSvg` remain
+available for consumers that want to inject a renderer.
